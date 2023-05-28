@@ -1,11 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { ImagesContext } from '../context/ImagesContext';
 import { Button } from '../styles/Button';
 
-
 export const UploadImages = () => {
-    const { imagesList, setImagesList } = useContext(ImagesContext);
-    const hiddenFileInput = React.useRef(null);
+    const { setImagesList } = useContext(ImagesContext);
+    const hiddenFileInput = useRef(null);
   
     const handleClick = (event) => {
         hiddenFileInput.current.click();
@@ -17,17 +16,16 @@ export const UploadImages = () => {
     };
 
     return (
-        <>
+        <div className="UploadImages">
         <Button onClick={handleClick}>
             Upload Images
         </Button>
         <input type="file" multiple
-             accept='image'
-             ref={hiddenFileInput}
-             onChange={handleChange}
-             style={{display:'none'}} 
-        />
-        </>
+               className="hidden"
+               accept="image"
+               ref={hiddenFileInput}
+               onChange={handleChange} />
+        </div>
     )
 }
 
