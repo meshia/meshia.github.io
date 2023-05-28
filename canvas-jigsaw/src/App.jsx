@@ -1,28 +1,26 @@
-import { useState } from 'react';
-// import reactLogo from './assets/react.svg'
-import { CSSVariables } from './styles/CSSVriables';
+import { useState, useEffect } from 'react';
 import { UploadImages } from './components/UploadImages';
+import { ImagesContext } from './context/ImagesContext';
+
 import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [imagesList, setImagesList] = useState([]);
+
+  useEffect(() =>{
+    console.log('imagesList', imagesList);
+  }, [ imagesList ])
 
   return (
     <div className='App'>
-      <CSSVariables>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <UploadImages />
-      </CSSVariables>
+      <ImagesContext.Provider
+        value={{ imagesList, setImagesList }}
+        >
+        <h1>Canvase Jigsaw Puzzle</h1>
+        <UploadImages />
+      </ImagesContext.Provider>
     </div>
   )
 }
 
-export default App
+export default App;
