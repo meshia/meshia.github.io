@@ -1,5 +1,6 @@
 :root {
-  --background-color: #F8F8F8;
+  --base-background: #F8F8F8;
+  --background-canvas: #cfcdcd;
   --text-color: #242424;
   --base-boder: #D4D4D4;
   --border-hover: #646cff;
@@ -30,7 +31,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   color: var(--text-color);
-  background-color: var(--background-color);
+  background-color: var(--base-background);
 }
 
 h1 {
