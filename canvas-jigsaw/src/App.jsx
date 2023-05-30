@@ -4,21 +4,19 @@ import { ThumbnailsList } from './components/ThumbnailsList';
 import { CanvasImage } from './components/CanvasImage';
 import { ImagesContext } from './context/ImagesContext';
 
-import './App.css';
-
 const App = () => {
   const [imagesList, setImagesList] = useState([]);
   const [selectedImage, setSelectedImage] = useState();
 
   return (
-    <div className='App'>
+    <section className='App'>
       <ImagesContext.Provider value={{ imagesList, setImagesList, selectedImage, setSelectedImage }}>
         <h1>Canvase Jigsaw Puzzle</h1>
-        <CanvasImage mainImage={ selectedImage }/>
+        <CanvasImage mainImage={ selectedImage } height="400" width="600"/>
         <ThumbnailsList />
         <UploadImages />
       </ImagesContext.Provider>
-    </div>
+    </section>
   )
 }
 

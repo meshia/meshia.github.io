@@ -1,48 +1,60 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import styled from 'styled-components';
+import { fabric } from 'fabric';
 
 const HeroImage = styled.div`
+    position: relative;
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
-    width: 100%;
     border-radius: 8px;
-    border: 1px solid transparent;
+    border: 1px solid var(--base-boder);
     padding: 1.2em;
     background-color: inherit;
-    border-color: var(--base-boder);
     canvas {
-        height: 400px;
-        aspect-ratio: 4/3;
-        background-color: var(--background-canvas);
         border-radius: 8px;
+        border: 1px solid var(--base-boder);
     }
     `;
 
 export const CanvasImage = ({ mainImage, height, width}) => {
-    const canvas = useRef();
+    const [Canvas, setCanvas] = useState();
+    const [ currImage, seCurrImage ] = useState();
+    const newImg = new Image();
 
-    useEffect(() => {
-        const context = canvas.current.getContext('2d');
-        draw(context);
+    useLayoutEffect(() => {
+        if( mainImage ) addImageToCanvas();
+    }, [ mainImage ]);
+
+    useLayoutEffect(() => {
+        setCanvas(initCanvas());
+    }, []);
+    
+    const addImageToCanvas = () => {
+        if ( Canvas ) Canvas.clear();
+        newImg.src = mainImage;
+        newImg.onload = () => {
+            const currentImage = new fabric.Image(newImg, {
+            });
+            currentImage.scaleToHeight(400);
+            currentImage.scaleToWidth(400);
+            Canvas.centerObject(currentImage);
+            Canvas.add(currentImage).renderAll();
+            seCurrImage(currentImage);
+        };
+    }
+
+    const initCanvas = () =>
+        new fabric.Canvas("canvas", {
+        height: height,
+        width: width,
+        backgroundColor: "#cfcdcd"
     });
-
-    const draw = (context) => {
-        if(mainImage) {
-            const image = new Image();
-            image.src = mainImage;
-            image.height = canvas.current.offsetHeight; 
-            console.log(canvas.current.offsetHeight, image.height)
-            image.onload = () => {
-                context.drawImage(image, 0, 0,
-                canvas.current.offsetWidth*0.6, canvas.current.offsetHeight*0.5); //TODO: keep ratio of image
-            };  
-        }
-    }; 
 
     return (
         <HeroImage>
-            <canvas ref={ canvas }></canvas>
+            <canvas width={ width } height={ height } id="canvas"></canvas>
+            
         </HeroImage>
     )
 }

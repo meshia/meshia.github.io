@@ -13,6 +13,7 @@ export const Thumbnail = styled.div`
     border-color: var(--base-boder);
     transition: border-color 0.2s;
     cursor: pointer;
+    z-index: 2;
     &:last-child {
         margin-right: auto;
     }
