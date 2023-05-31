@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { fabric } from 'fabric';
+import { Button } from '../styles/Button';
 
-const HeroImage = styled.div`
+const CanvasContainer = styled.div`
     position: relative;
     display: flex;
     flex-flow: row wrap;
@@ -18,9 +19,10 @@ const HeroImage = styled.div`
     `;
 
 export const CanvasImage = ({ mainImage, height, width}) => {
-    const [Canvas, setCanvas] = useState();
-    const [ currImage, seCurrImage ] = useState();
-    const newImg = new Image();
+    const [ Canvas, setCanvas ] = useState();
+    const [ isDrawing, setIsDrawing ] = useState(false);
+    const ImageRef = useRef(null);
+    const ShapeRef = useRef(null);
 
     useLayoutEffect(() => {
         if( mainImage ) addImageToCanvas();
@@ -32,15 +34,17 @@ export const CanvasImage = ({ mainImage, height, width}) => {
     
     const addImageToCanvas = () => {
         if ( Canvas ) Canvas.clear();
+        const newImg = new Image();
         newImg.src = mainImage;
         newImg.onload = () => {
             const currentImage = new fabric.Image(newImg, {
+                selectable: true
             });
             currentImage.scaleToHeight(400);
             currentImage.scaleToWidth(400);
             Canvas.centerObject(currentImage);
             Canvas.add(currentImage).renderAll();
-            seCurrImage(currentImage);
+            ImageRef.current = currentImage;
         };
     }
 
@@ -51,10 +55,37 @@ export const CanvasImage = ({ mainImage, height, width}) => {
         backgroundColor: "#cfcdcd"
     });
 
+    const handleDrawShape = (event) => {
+        Canvas.isDrawingMode = true;
+        Canvas.freeDrawingBrush.width = 5;
+        Canvas.freeDrawingBrush.color = 'red';
+        Canvas.selection = false;
+    
+        // Event listener for when drawing is complete
+        Canvas.on('path:created', (event) => {
+            const path = event.path;
+            const shape = new fabric.Path(path.path, {
+              fill: 'black',
+              stroke: 'black',
+              strokeWidth: 2,
+              selectable: true
+            });
+            Canvas.remove(path);
+            Canvas.add(shape);
+            Canvas.renderAll();
+            ShapeRef.current = shape;
+        });
+    };
+
+    const handleCutout  = (event) => {
+        
+    };
+
     return (
-        <HeroImage>
+        <CanvasContainer>
+            <Button onClick={ handleCutout }>Cut Image</Button>
+            <Button onClick={ handleDrawShape }>Draw Shape</Button>
             <canvas width={ width } height={ height } id="canvas"></canvas>
-            
-        </HeroImage>
+        </CanvasContainer>
     )
 }
