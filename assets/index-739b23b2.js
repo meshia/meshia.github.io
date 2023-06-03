@@ -105,6 +105,8 @@ Error generating stack: `+y.message+`
     }
 `,Sp=()=>{const{setImagesList:e}=ye.useContext(Ya),t=ye.useRef(null),n=m=>{t.current.click()},h=m=>{const y=m.target.files;e(y)};return ke.jsxs("div",{className:"UploadImages",children:[ke.jsx(Ko,{onClick:n,children:"Upload Images"}),ke.jsx("input",{type:"file",multiple:!0,className:"hidden",accept:"image",ref:t,onChange:h})]})},wp=Ui.div`
     display: flex;
+    justify-content: center;
+    overflow: hidden;
     height: 80px;
     aspect-ratio: 4/3;
     border: 1px solid var(--border-hover);
@@ -123,9 +125,9 @@ Error generating stack: `+y.message+`
         scale: 1.1;
     }
     img {
-        width: 100%;
+        display: flex;
         height: 100%;
-        image-size: cover;
+        background-size: cover;
         border-radius: var(--border-radius);
     }
 `,xp=Ui.div`
