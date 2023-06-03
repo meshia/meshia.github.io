@@ -15,4 +15,8 @@ export const Button = styled.button`
     &:hover {
         border-color: var(--border-hover);
     }
+    &.active {
+        background-color: var(--active-background);
+        color: var(--active-text);
+    }
 `;

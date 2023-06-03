@@ -7,18 +7,19 @@ export const Thumbnail = styled.div`
     aspect-ratio: 4/3;
     border-radius: 8px;
     border: 1px solid transparent;
-    padding: 0.6em 1.2em;
+    padding: 0.6em;
     margin: 0.6em 1.2em;
     background-color: inherit;
-    border-color: var(--base-boder);
-    transition: border-color 0.2s;
+    border-color: var(--border-hover);
+    scale: 1;
+    transition: scale 0.2s;
     cursor: pointer;
     z-index: 2;
     &:last-child {
         margin-right: auto;
     }
-    &:hover {
-        border-color: var(--border-hover);
+    &:focus, &:hover {
+        scale: 1.1;
     }
     img {
         width: 100%;

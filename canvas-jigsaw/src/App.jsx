@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { UploadImages } from './components/UploadImages';
 import { ThumbnailsList } from './components/ThumbnailsList';
 import { CanvasImage } from './components/CanvasImage';
-import { Canvas } from './components/Canvas';
 import { ImagesContext } from './context/ImagesContext';
 
 const App = () => {
@@ -12,9 +11,8 @@ const App = () => {
   return (
     <section className='App'>
       <ImagesContext.Provider value={{ imagesList, setImagesList, selectedImage, setSelectedImage }}>
-        <h1>Canvase Jigsaw Puzzle</h1>S
+        <h1>Canvase Jigsaw Puzzle</h1>
         <CanvasImage mainImage={ selectedImage } height="400" width="600"/>
-        {/* <Canvas mainImage={ selectedImage } height="400" width="600"/> */}
         <ThumbnailsList />
         <UploadImages />
       </ImagesContext.Provider>

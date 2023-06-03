@@ -6,6 +6,9 @@
   --text-color: #242424;
   --base-boder: #D4D4D4;
   --border-hover: #646cff;
+  --active-background: #646cff;
+  --active-text: #D4D4D4;
+  ;
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

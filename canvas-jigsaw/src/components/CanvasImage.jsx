@@ -35,12 +35,15 @@ export const CanvasImage = ({ mainImage, height, width}) => {
     const addImageToCanvas = () => {
         if ( Canvas ) Canvas.clear();
         fabric.Image.fromURL(mainImage, (img) => {
-            img.set({ selectable: true });
+            img.set({
+                selectable: true
+            });
             img.scaleToHeight(400);
             img.scaleToWidth(400);
             Canvas.centerObject(img);
             Canvas.add(img).renderAll();
             ImageRef.current = img;
+            console.log(ImageRef.current);
         });
     }
 
@@ -51,7 +54,7 @@ export const CanvasImage = ({ mainImage, height, width}) => {
         backgroundColor: "#cfcdcd"
     });
 
-    const handleDrawShape = (event) => {
+    const handleDrawPuzzleShape = (event) => {
         Canvas.isDrawingMode = true;
         Canvas.freeDrawingBrush.width = 5;
         Canvas.freeDrawingBrush.color = CUTOUT_COLOR;
@@ -60,39 +63,41 @@ export const CanvasImage = ({ mainImage, height, width}) => {
     
         // Event listener for when drawing is complete
         Canvas.on('path:created', (event) => {
+            console.log(":created")
             const path = event.path;
             const cut = new fabric.Path(path.path, {
                 fill: CUTOUT_COLOR,
                 dirty: true,
-                strokeWidth: 2,
+                strokeWidth: 1,
                 opacity: 1,
                 selectable: false,
             });
-            Canvas.add(cut);
             const shape = new fabric.Path(path.path, {
-              fill: CUTOUT_COLOR,
-              dirty: true,
-              strokeWidth: 2,
-              opacity: 1,
-              selectable: true,
+                fill: CUTOUT_COLOR,
+                dirty: true,
+                strokeWidth: 1,
+                opacity: 1,
+                selectable: true,
+                zoomX: 1,
+                zoomY: 1
             });
-
-            fabric.util.loadImage(mainImage, function (img) {
-                shape.set ({
-                    stroke: "red",
-                })
-                shape.fill = new fabric.Pattern({
-                    source: img,
-                    repeat: 'repeat'
-                }); 
-                Canvas.add(shape);
-                Canvas.isDrawingMode = false;
-                //Canvas.remove(shape);
-                Canvas.selection = true;
-                Canvas.renderAll();
-                ShapeRef.current = shape;
+            const pattern = new fabric.Pattern({
+                source: Canvas.getElement(),
+                repeat: 'no-repeat',
+                offsetX: ( shape.left+shape.width*0.3 )*-1,
+                offsetY: ( shape.top+shape.top*0.3 )*-1,
             });
+            shape.fill = pattern;
             Canvas.remove(path);
+            Canvas.add(shape);
+            Canvas.isDrawingMode = false;
+            Canvas.selection = true;
+            Canvas.renderAll();
+            Canvas.add(cut);
+            Canvas.sendToBack(cut);
+            Canvas.sendToBack(ImageRef.current);
+            Canvas.renderAll();
+            Canvas.off('path:created');
         });
     };
 
@@ -109,7 +114,7 @@ export const CanvasImage = ({ mainImage, height, width}) => {
 
     return (
         <CanvasContainer>
-            <Button onClick={ handleDrawShape }>Draw Shape</Button>
+            <Button onClick={ handleDrawPuzzleShape }>Draw Shape</Button>
             <canvas width={ width } height={ height } id="canvas"></canvas>
         </CanvasContainer>
     )
