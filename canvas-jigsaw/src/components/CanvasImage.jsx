@@ -108,8 +108,8 @@ export const CanvasImage = ({ mainImage, height, width}) => {
             const pattern = new fabric.Pattern({ // add the image to the puzzle piece
                 source: Canvas.getElement(),
                 repeat: 'no-repeat',
-                offsetX: ( shape.left+shape.width*0.3 )*-1,
-                offsetY: ( shape.top+shape.top*0.3 )*-1,
+                offsetX: ( shape.left+shape.width*0.5 )*-1,
+                offsetY: ( shape.top+shape.top*0.5 )*-1,
             });
 
             shape.fill = pattern;
