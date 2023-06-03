@@ -16,13 +16,13 @@ const CanvasContainer = styled.div`
         border-radius: 8px;
         border: 1px solid var(--base-boder);
     }
-    `;
+`;
 
 export const CanvasImage = ({ mainImage, height, width}) => {
     const [ Canvas, setCanvas ] = useState();
-    const [ isDrawing, setIsDrawing ] = useState(false);
     const ImageRef = useRef(null);
     const ShapeRef = useRef(null);
+    const CUTOUT_COLOR = "black";
 
     useLayoutEffect(() => {
         if( mainImage ) addImageToCanvas();
@@ -34,18 +34,14 @@ export const CanvasImage = ({ mainImage, height, width}) => {
     
     const addImageToCanvas = () => {
         if ( Canvas ) Canvas.clear();
-        const newImg = new Image();
-        newImg.src = mainImage;
-        newImg.onload = () => {
-            const currentImage = new fabric.Image(newImg, {
-                selectable: true
-            });
-            currentImage.scaleToHeight(400);
-            currentImage.scaleToWidth(400);
-            Canvas.centerObject(currentImage);
-            Canvas.add(currentImage).renderAll();
-            ImageRef.current = currentImage;
-        };
+        fabric.Image.fromURL(mainImage, (img) => {
+            img.set({ selectable: true });
+            img.scaleToHeight(400);
+            img.scaleToWidth(400);
+            Canvas.centerObject(img);
+            Canvas.add(img).renderAll();
+            ImageRef.current = img;
+        });
     }
 
     const initCanvas = () =>
@@ -58,32 +54,61 @@ export const CanvasImage = ({ mainImage, height, width}) => {
     const handleDrawShape = (event) => {
         Canvas.isDrawingMode = true;
         Canvas.freeDrawingBrush.width = 5;
-        Canvas.freeDrawingBrush.color = 'red';
+        Canvas.freeDrawingBrush.color = CUTOUT_COLOR;
         Canvas.selection = false;
+        ImageRef.current.selectable = false;
     
         // Event listener for when drawing is complete
         Canvas.on('path:created', (event) => {
             const path = event.path;
+            const cut = new fabric.Path(path.path, {
+                fill: CUTOUT_COLOR,
+                dirty: true,
+                strokeWidth: 2,
+                opacity: 1,
+                selectable: false,
+            });
+            Canvas.add(cut);
             const shape = new fabric.Path(path.path, {
-              fill: 'black',
-              stroke: 'black',
+              fill: CUTOUT_COLOR,
+              dirty: true,
               strokeWidth: 2,
-              selectable: true
+              opacity: 1,
+              selectable: true,
+            });
+
+            fabric.util.loadImage(mainImage, function (img) {
+                shape.set ({
+                    stroke: "red",
+                })
+                shape.fill = new fabric.Pattern({
+                    source: img,
+                    repeat: 'repeat'
+                }); 
+                Canvas.add(shape);
+                Canvas.isDrawingMode = false;
+                //Canvas.remove(shape);
+                Canvas.selection = true;
+                Canvas.renderAll();
+                ShapeRef.current = shape;
             });
             Canvas.remove(path);
-            Canvas.add(shape);
-            Canvas.renderAll();
-            ShapeRef.current = shape;
         });
     };
 
-    const handleCutout  = (event) => {
-        
-    };
+
+    const addPattern = (obj, pattern) => {
+        fabric.util.loadImage('http://fabricjs.com/assets/pug_small.jpg', function (img) {
+            obj.fill = new fabric.Pattern({
+                source: img,
+                repeat: 'no-repeat'
+            }); 
+            Canvas.renderAll();
+          });
+      }
 
     return (
         <CanvasContainer>
-            <Button onClick={ handleCutout }>Cut Image</Button>
             <Button onClick={ handleDrawShape }>Draw Shape</Button>
             <canvas width={ width } height={ height } id="canvas"></canvas>
         </CanvasContainer>

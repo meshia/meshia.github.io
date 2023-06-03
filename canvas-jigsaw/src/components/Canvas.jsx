@@ -1,63 +1,52 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import styled from 'styled-components';
 import { fabric } from 'fabric';
+import { Button } from '../styles/Button';
+
+const CanvasContainer = styled.div`
+    position: relative;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid var(--base-boder);
+    padding: 1.2em;
+    background-color: inherit;
+    canvas {
+        border-radius: 8px;
+        border: 1px solid var(--base-boder);
+    }
+`;
 
 export const Canvas = ({ mainImage, height, width}) => {
     const canvasRef = useRef(null);
-    const shape = useRef(null);
-    const isDrawing = useRef(false);
 
-  useEffect(() => {
-    const canvas = new fabric.Canvas(canvasRef.current, {backgroundColor: "#cfcdcd"});
-
-    const handleMouseDown = (event) => {
-      isDrawing.current = true;
-      const pointer = canvas.getPointer(event.e);
-
-      // Create a new shape (path) on mouse down
-      const path = new fabric.Path(`M ${pointer.x} ${pointer.y}`, {
-        fill: 'black',
-        stroke: 'black',
-        strokeWidth: 2
+  useEffect(()=>{
+    const canvas = new fabric.Canvas(canvasRef.current, {
+        selection: false,
+        backgroundColor: "#cfcdcd"
       });
 
-      // Add the shape to the canvas
-      canvas.add(path);
-      shape.current = path;
-    };
+    if(canvas && mainImage) {
+        const rect = new fabric.Rect({
+            width: 200,
+            height: 200,
+            left: 100,
+            top: 100,
+            fill: new fabric.Pattern({
+              source: mainImage,
+              repeat: 'repeat'
+            })
+          });
+      
+          canvas.add(rect);
+          canvas.renderAll();
+    }
+  }, [mainImage, canvasRef])
 
-    const handleMouseMove = (event) => {
-      if (!isDrawing.current) return;
-      const pointer = canvas.getPointer(event.e);
-
-      // Update the shape (path) with new point while dragging
-      shape.current.path.push(['L', pointer.x, pointer.y]);
-
-      // Render the canvas
-      canvas.renderAll();
-    };
-
-    const handleMouseUp = () => {
-      isDrawing.current = false;
-
-      // Close the shape (path) on mouse up
-      shape.current.path.push(['z']);
-
-      // Render the canvas
-      canvas.renderAll();
-    };
-
-    // Attach the mouse event listeners
-    canvas.on('mouse:down', handleMouseDown);
-    canvas.on('mouse:move', handleMouseMove);
-    canvas.on('mouse:up', handleMouseUp);
-
-    // Clean up the event listeners when the component unmounts
-    return () => {
-      canvas.off('mouse:down', handleMouseDown);
-      canvas.off('mouse:move', handleMouseMove);
-      canvas.off('mouse:up', handleMouseUp);
-    };
-  }, []);
-
-  return <canvas width={ width } height={ height } ref={canvasRef}></canvas>
-};
+  return (
+    <div>
+      <canvas width={width} height={height} ref={canvasRef} />
+    </div>
+  );
+}
