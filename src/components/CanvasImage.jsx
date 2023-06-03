@@ -32,17 +32,18 @@ const ToolkitDiv = styled.div`
     transition: all ease-out 1s;
     overflow: hidden;
     &.show {
-        height: auto;
-        padding-bottom: var(--base-padding);
+        height: 50px;
     }
 `;
 
 export const CanvasImage = ({ mainImage, height, width}) => {
     const [ Canvas, setCanvas ] = useState();
+    const [ PuzzleRef, setPuzzleRef ] = useState(null);
     const [ lockedImage, setLockedImage ] = useState(false);
     const ImageRef = useRef(null);
+    const CutRef = useRef(null);
     const [ displayToolkit, setDisplayToolkit ] = useState("");
-    const CUTOUT_COLOR = "black";
+    const CUTOUT_COLOR = "#cfcdcd";
 
     useLayoutEffect(() => {
         if( mainImage ) {
@@ -93,14 +94,17 @@ export const CanvasImage = ({ mainImage, height, width}) => {
                 opacity: 1,
                 selectable: false,
             });
+            CutRef.current = cut;
 
             const shape = new fabric.Path(path.path, {// the puzzle piece
                 fill: CUTOUT_COLOR,
                 dirty: true,
                 strokeWidth: 1,
                 opacity: 1,
-                selectable: true
+                visible: true,
+                selectable: true,
             });
+            setPuzzleRef(shape);
     
             const ctx = Canvas.getContext("2d");
             const img = new Image();
@@ -137,6 +141,14 @@ export const CanvasImage = ({ mainImage, height, width}) => {
         }
     };
 
+    const handleDeleteShape = (event) => {
+        Canvas.remove(PuzzleRef);
+        Canvas.remove(CutRef.current);
+        setPuzzleRef(null);
+        CutRef.current = null;
+
+    }
+
     return (
         <CanvasContainer>
             <canvas width={ width } height={ height } id="canvas"></canvas>
@@ -149,6 +161,12 @@ export const CanvasImage = ({ mainImage, height, width}) => {
                     <PuzzleIcon />
                     <span>Cut a Puzzle Piece</span>
                 </Button>
+                { PuzzleRef !== null && <Button className="iconButton" onClick={ handleDeleteShape }>
+                    {console.log("PuzzleRef", PuzzleRef)}
+                    X
+                    <span>Delete Puzzle Piece</span>
+                </Button>
+                }
             </ToolkitDiv>
         </CanvasContainer>
     )
