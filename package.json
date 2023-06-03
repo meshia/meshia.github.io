@@ -2,7 +2,7 @@
   "name": "canvas-jigsaw",
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://meshia.github.io/CanvasJigsaw",
+  "homepage": "https://meshia.github.io",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

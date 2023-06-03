@@ -10,7 +10,7 @@ export default defineConfig(({ command }) => {
   }
 
   if (command !== 'serve') {
-    config.base = '/CanvasJigsaws/'
+    config.base = '/'
   }
 
   return config
