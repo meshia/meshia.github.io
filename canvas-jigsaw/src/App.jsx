@@ -12,7 +12,7 @@ const App = () => {
     <section className='App'>
       <ImagesContext.Provider value={{ imagesList, setImagesList, selectedImage, setSelectedImage }}>
         <h1>Canvase Jigsaw Puzzle</h1>
-        <CanvasImage mainImage={ selectedImage } height="400" width="600"/>
+        <CanvasImage mainImage={ selectedImage } height="400" width="800"/>
         <ThumbnailsList />
         <UploadImages />
       </ImagesContext.Provider>

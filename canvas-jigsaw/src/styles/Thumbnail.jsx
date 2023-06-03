@@ -5,15 +5,14 @@ export const Thumbnail = styled.div`
     display: flex;
     height: 80px;
     aspect-ratio: 4/3;
-    border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 0.6em;
+    border: 1px solid var(--border-hover);
+    border-radius: var(--border-radius);
+    padding: var(--base-padding);
     margin: 0.6em 1.2em;
     background-color: inherit;
-    border-color: var(--border-hover);
     scale: 1;
-    transition: scale 0.2s;
     cursor: pointer;
+    transition: scale 0.2s;
     z-index: 2;
     &:last-child {
         margin-right: auto;
@@ -25,5 +24,6 @@ export const Thumbnail = styled.div`
         width: 100%;
         height: 100%;
         image-size: cover;
+        border-radius: var(--border-radius);
     }
 `;

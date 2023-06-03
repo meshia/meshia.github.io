@@ -6,9 +6,13 @@
   --text-color: #242424;
   --base-boder: #D4D4D4;
   --border-hover: #646cff;
+  --icon: #646cff;
   --active-background: #646cff;
   --active-text: #D4D4D4;
-  ;
+  --active-icon: var(--active-text);
+  
+  --base-padding: 0.6em;
+  --border-radius: 8px;
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -35,7 +39,7 @@ body {
   justify-content: center;
   width: 90%;
   max-width: 1280px;
-  padding: 1rem;
+  padding: var(--base-padding);
   text-align: center;
 }
 
