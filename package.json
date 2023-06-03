@@ -16,6 +16,7 @@
     "fabricjs-react": "^1.2.0",
     "gh-pages": "^5.0.0",
     "react": "^18.2.0",
+    "react-confirm-alert": "^3.0.6",
     "react-dom": "^18.2.0",
     "styled-components": "^5.3.11",
     "vite-plugin-svgr": "^3.2.0"

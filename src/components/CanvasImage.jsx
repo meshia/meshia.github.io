@@ -4,6 +4,9 @@ import { fabric } from 'fabric';
 import { Button } from '../styles/Button';
 import { ReactComponent as LockIcon } from '../assets/icons/lock.svg';
 import { ReactComponent as PuzzleIcon } from '../assets/icons/puzzle.svg';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 
 const CanvasContainer = styled.div`
     position: relative;
@@ -142,11 +145,24 @@ export const CanvasImage = ({ mainImage, height, width}) => {
     };
 
     const handleDeleteShape = (event) => {
-        Canvas.remove(PuzzleRef);
-        Canvas.remove(CutRef.current);
-        setPuzzleRef(null);
-        CutRef.current = null;
-
+        confirmAlert({
+            title: 'Are you sure?',
+            message: 'You want to delete this puzzle piece?',
+            buttons: [
+                {
+                label: 'Yes',
+                onClick: () => { 
+                        Canvas.remove(PuzzleRef);
+                        Canvas.remove(CutRef.current);
+                        setPuzzleRef(null);
+                        CutRef.current = null;
+                    }
+                },
+                {
+                label: 'No'
+                }
+            ],
+          });
     }
 
     return (
