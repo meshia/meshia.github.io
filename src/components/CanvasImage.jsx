@@ -65,10 +65,9 @@ export const CanvasImage = ({ mainImage, height, width}) => {
         if ( Canvas ) Canvas.clear();
         fabric.Image.fromURL(mainImage, (img) => {
             img.set({
-                selectable: true
+                selectable: true,
             });
-            img.scaleToHeight(400);
-            img.scaleToWidth(400);
+            img.scale(0.5);
             Canvas.centerObject(img);
             Canvas.add(img).renderAll();
             ImageRef.current = img;
@@ -100,17 +99,15 @@ export const CanvasImage = ({ mainImage, height, width}) => {
                 dirty: true,
                 strokeWidth: 1,
                 opacity: 1,
-                selectable: true,
-                zoomX: 1,
-                zoomY: 1
+                selectable: true
             });
-
-            const pattern = new fabric.Pattern({ // add the image to the puzzle piece
-                source: Canvas.getElement(),
-                repeat: 'no-repeat',
-                offsetX: ( shape.left+shape.width*0.5 )*-1,
-                offsetY: ( shape.top+shape.top*0.5 )*-1,
-            });
+    
+            const ctx = Canvas.getContext("2d");
+            const img = new Image();
+            img.src = mainImage;
+            const matrix = new DOMMatrix([1, 0, 0, 1, ( shape.left - ImageRef.current.left + shape.width/2 )*-1, ( shape.top - ImageRef.current.top + shape.height/2 )*-1]);
+            const pattern = ctx.createPattern(img, "no-repeat");
+             pattern.setTransform(matrix.scale(0.5));
 
             shape.fill = pattern;
             Canvas.remove(path);
