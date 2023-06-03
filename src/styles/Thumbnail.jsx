@@ -3,6 +3,8 @@ import styled from 'styled-components';
 // only a reusable component would get a styled file for its own
 export const Thumbnail = styled.div`
     display: flex;
+    justify-content: center;
+    overflow: hidden;
     height: 80px;
     aspect-ratio: 4/3;
     border: 1px solid var(--border-hover);
@@ -21,9 +23,9 @@ export const Thumbnail = styled.div`
         scale: 1.1;
     }
     img {
-        width: 100%;
+        display: flex;
         height: 100%;
-        image-size: cover;
+        background-size: cover;
         border-radius: var(--border-radius);
     }
 `;

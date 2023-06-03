@@ -4,6 +4,6 @@ import svgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/meshia.github.io/canvas-jigsaw/",
+  base: "/meshia.github.io/",
   plugins: [svgr(), react()],
 })
