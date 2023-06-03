@@ -45,6 +45,7 @@ export const CanvasImage = ({ mainImage, height, width}) => {
     const [ lockedImage, setLockedImage ] = useState(false);
     const ImageRef = useRef(null);
     const [ displayToolkit, setDisplayToolkit ] = useState("");
+    const PATH_COLOR = "#646cff";
     const CUTOUT_COLOR = "#cfcdcd";
 
     useLayoutEffect(() => {
@@ -89,6 +90,7 @@ export const CanvasImage = ({ mainImage, height, width}) => {
         // Event listener for when drawing is complete
         Canvas.on('path:created', (event) => {
             const path = event.path;
+
             const cut = new fabric.Path(path.path, { // the hole behind the puzzle piece
                 fill: CUTOUT_COLOR,
                 dirty: true,
@@ -96,9 +98,11 @@ export const CanvasImage = ({ mainImage, height, width}) => {
                 opacity: 1,
                 selectable: false,
             });
+            
 
             const shape = new fabric.Path(path.path, {// the puzzle piece
-                fill: CUTOUT_COLOR,
+                fill: PATH_COLOR,
+                stroke: PATH_COLOR,
                 dirty: true,
                 strokeWidth: 1,
                 opacity: 1,

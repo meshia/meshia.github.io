@@ -11,6 +11,7 @@ export const Button = styled.button`
     background-color: inherit;
     transition: border-color ease-in-out 0.2s
     cursor: pointer;
+    color: var(--button-text);
     &:hover {
         border-color: var(--border-hover);
     }

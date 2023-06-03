@@ -5,8 +5,10 @@
   --background-canvas: #cfcdcd;
   --text-color: #242424;
   --base-boder: #D4D4D4;
+  --h1-color: #646cff;
   --border-hover: #646cff;
   --icon: #646cff;
+  --button-text: #646cff;
   --active-background: #646cff;
   --active-text: #D4D4D4;
   --active-icon: var(--active-text);
@@ -53,8 +55,9 @@ h1 {
   font-size: 2.8em;
   margin: 0.2em 0 0.5em;
   line-height: 1;
+  color: var(--h1-color);
+  -webkit-text-stroke: 1px var(--base-boder);
 }
-
 
 .hidden {
   display: none;
