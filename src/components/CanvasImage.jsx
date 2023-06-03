@@ -44,7 +44,6 @@ export const CanvasImage = ({ mainImage, height, width}) => {
     const [ PuzzleRef, setPuzzleRef ] = useState(null);
     const [ lockedImage, setLockedImage ] = useState(false);
     const ImageRef = useRef(null);
-    const CutRef = useRef(null);
     const [ displayToolkit, setDisplayToolkit ] = useState("");
     const CUTOUT_COLOR = "#cfcdcd";
 
@@ -97,7 +96,6 @@ export const CanvasImage = ({ mainImage, height, width}) => {
                 opacity: 1,
                 selectable: false,
             });
-            CutRef.current = cut;
 
             const shape = new fabric.Path(path.path, {// the puzzle piece
                 fill: CUTOUT_COLOR,
@@ -106,7 +104,19 @@ export const CanvasImage = ({ mainImage, height, width}) => {
                 opacity: 1,
                 visible: true,
                 selectable: true,
+                bind: cut,
             });
+
+            shape.on("mousedown", (event)=> {
+                setPuzzleRef(event.target);
+            })
+
+            Canvas.on('object:removed', (event) =>{
+                if(event.target.bind) {
+                    Canvas.remove(event.target.bind);
+                }
+
+            })
             setPuzzleRef(shape);
     
             const ctx = Canvas.getContext("2d");
@@ -153,9 +163,7 @@ export const CanvasImage = ({ mainImage, height, width}) => {
                 label: 'Yes',
                 onClick: () => { 
                         Canvas.remove(PuzzleRef);
-                        Canvas.remove(CutRef.current);
                         setPuzzleRef(null);
-                        CutRef.current = null;
                     }
                 },
                 {
@@ -178,7 +186,6 @@ export const CanvasImage = ({ mainImage, height, width}) => {
                     <span>Cut a Puzzle Piece</span>
                 </Button>
                 { PuzzleRef !== null && <Button className="iconButton" onClick={ handleDeleteShape }>
-                    {console.log("PuzzleRef", PuzzleRef)}
                     X
                     <span>Delete Puzzle Piece</span>
                 </Button>
