@@ -35,7 +35,6 @@ const ToolkitDiv = styled.div`
         height: auto;
         padding-bottom: var(--base-padding);
     }
-
 `;
 
 export const CanvasImage = ({ mainImage, height, width}) => {
