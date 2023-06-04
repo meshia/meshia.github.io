@@ -98,7 +98,6 @@ export const CanvasImage = ({ mainImage, height, width}) => {
                 opacity: 1,
                 selectable: false,
             });
-            
 
             const shape = new fabric.Path(path.path, {// the puzzle piece
                 fill: PATH_COLOR,
@@ -126,22 +125,23 @@ export const CanvasImage = ({ mainImage, height, width}) => {
             const ctx = Canvas.getContext("2d");
             const img = new Image();
             img.src = mainImage;
-            const matrix = new DOMMatrix([1, 0, 0, 1, ( shape.left - ImageRef.current.left + shape.width/2 )*-1, ( shape.top - ImageRef.current.top + shape.height/2 )*-1]);
-            const pattern = ctx.createPattern(img, "no-repeat");
-             pattern.setTransform(matrix.scale(0.5));
+            img.onload = () => {
+                const matrix = new DOMMatrix([1, 0, 0, 1, ( shape.left - ImageRef.current.left + shape.width/2 )*-1, ( shape.top - ImageRef.current.top + shape.height/2 )*-1]);
+                const pattern = ctx.createPattern(img, "no-repeat");
+                pattern.setTransform(matrix.scale(0.5));
+                shape.fill = pattern;
+                Canvas.add(shape);
+                Canvas.remove(path);
+                Canvas.isDrawingMode = false;
+                Canvas.selection = true;
+                Canvas.renderAll(); //render the piece of the puzzle
 
-            shape.fill = pattern;
-            Canvas.remove(path);
-            Canvas.add(shape);
-            Canvas.isDrawingMode = false;
-            Canvas.selection = true;
-            Canvas.renderAll(); //render the piece of the puzzle
-
-            Canvas.add(cut);
-            Canvas.sendToBack(cut);
-            Canvas.sendToBack(ImageRef.current);
-            Canvas.renderAll(); //render the hole behind the piece of the puzzle *after* the puzzle piece has been rendered
-            Canvas.off('path:created'); //remove event
+                Canvas.add(cut);
+                Canvas.sendToBack(cut);
+                Canvas.sendToBack(ImageRef.current);
+                Canvas.renderAll(); //render the hole behind the piece of the puzzle *after* the puzzle piece has been rendered
+                Canvas.off('path:created'); //remove event
+            }
         });
     };
 
